@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="nl" class="is-demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aan Tafel – koffie &amp; lunch</title>
+  <meta name="description" content="Schuif aan voor goede koffie, een vers ontbijt of een uitgebreide lunch.">
+  <meta name="theme-color" content="#faf5ee">
+  <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/css/site.css?v=mvo0zia2">
+  <script src="./assets/js/common.js?v=mvo0zia2" defer></script>
+  <script src="./assets/js/site.js?v=mvo0zia2" defer></script>
+</head>
+<body>
+  <div id="demo-banner" class="demo-banner" hidden></div>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" data-brand href="./">Aan Tafel</a>
+      <nav class="nav" aria-label="Hoofdmenu">
+        <a href="#menukaart" data-i18n="nav_menu">Menukaart</a>
+        <a href="#over" data-i18n="nav_story">Over ons</a>
+        <a href="#info" data-i18n="nav_info">Openingstijden &amp; route</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Taal / Language">
+          <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-primary btn-small" data-href="/bestellen" href="./bestellen" data-i18n="nav_order">Bestellen</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <figure class="hero-photo" id="hero-photo" hidden><img class="hero-img" id="hero-img" alt=""></figure>
+        <div>
+          <p class="hero-name" id="hero-name">Aan Tafel</p>
+          <h1 id="hero-title">Even tijd voor iets lekkers.</h1>
+          <p id="hero-intro">Schuif aan voor goede koffie, een vers ontbijt of een uitgebreide lunch.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#menukaart" data-i18n="btn_menu">Bekijk de menukaart</a>
+            <a class="btn btn-primary" data-href="/bestellen" href="./bestellen" data-i18n="btn_order">Bestel voor afhalen</a>
+          </div>
+          <p class="hero-facts" id="hero-facts"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="menukaart" aria-labelledby="menu-title">
+      <div class="wrap">
+        <article class="menu-card">
+          <header class="menu-card-head">
+            <p class="menu-card-brand" data-brand-plain>Aan Tafel</p>
+            <h2 id="menu-title" class="menu-card-title" data-i18n="menu_title">Menukaart</h2>
+            <p class="muted" data-i18n="menu_intro"></p>
+            <nav class="menu-jump" id="menu-chips" aria-label="Categorieën"></nav>
+          </header>
+          <div class="menu-columns" id="menu"><p class="muted">…</p></div>
+          <footer class="menu-card-foot">
+            <p class="small muted"><span data-i18n="prices_note"></span> <span data-i18n="allergens_from_business"></span></p>
+            <a class="btn btn-primary" data-href="/bestellen" href="./bestellen" data-i18n="btn_order">Bestel voor afhalen</a>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <section id="over" class="section-soft" aria-labelledby="story-title">
+      <div class="wrap story">
+        <div>
+          <h2 id="story-title">Over ons</h2>
+          <div id="story"></div>
+        </div>
+        <div>
+          <h3 class="sr-only" data-i18n="story_gallery">Sfeerbeelden</h3>
+          <div class="gallery" id="gallery"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="info" class="visit" aria-labelledby="info-title">
+      <div class="wrap">
+        <article class="menu-card visit-card">
+          <header class="menu-card-head">
+            <p class="menu-card-brand" data-brand-plain>Aan Tafel</p>
+            <h2 id="info-title" class="menu-card-title" data-i18n="visit_title">Kom langs</h2>
+          </header>
+          <div class="visit-grid">
+            <div class="visit-col">
+              <h3 class="visit-head" data-i18n="hours">Openingstijden</h3>
+              <ul class="hours" id="hours"></ul>
+              <div id="closures"></div>
+            </div>
+            <div class="visit-col">
+              <h3 class="visit-head" data-i18n="location">Locatie &amp; route</h3>
+              <address id="address"></address>
+              <p id="route" class="muted small"></p>
+              <p id="route-link"></p>
+            </div>
+            <div class="visit-col">
+              <h3 class="visit-head" data-i18n="contact">Contact</h3>
+              <p id="contact"></p>
+              <div id="delivery-info"></div>
+              <p><a class="btn btn-primary btn-small" data-href="/bestellen" href="./bestellen" data-i18n="btn_order">Bestel voor afhalen</a></p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="footer"></footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="nl" class="is-demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Je bestelling – Aan Tafel</title>
+  <meta name="theme-color" content="#faf5ee">
+  <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/css/site.css?v=mvo0zia2">
+  <script src="./assets/js/common.js?v=mvo0zia2" defer></script>
+  <script src="./assets/js/showcase-api.js?v=mvo0zia2" defer></script>
+  <script src="./assets/js/status.js?v=mvo0zia2" defer></script>
+</head>
+<body>
+  <div id="demo-banner" class="demo-banner" hidden></div>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" data-brand href="./">Aan Tafel</a>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-small" data-href="/" href="./" data-i18n="back_home">← Website</a>
+        <div class="lang-switch" role="group" aria-label="Taal / Language">
+          <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="status-card card" id="status" aria-live="polite">
+      <p><span class="spinner" aria-hidden="true"></span> <span data-i18n="loading">Laden…</span></p>
+    </div>
+  </main>
+  <footer class="site-footer" id="footer"></footer>
+</body>
+</html>

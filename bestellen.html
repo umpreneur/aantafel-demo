@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="nl" class="is-demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bestellen – Aan Tafel</title>
+  <meta name="description" content="Bestel online voor afhalen bij Aan Tafel.">
+  <meta name="theme-color" content="#faf5ee">
+  <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/css/site.css?v=mvo0zia2">
+  <script src="./assets/js/common.js?v=mvo0zia2" defer></script>
+  <script src="./assets/js/showcase-api.js?v=mvo0zia2" defer></script>
+  <script src="./assets/js/order.js?v=mvo0zia2" defer></script>
+</head>
+<body>
+  <div id="demo-banner" class="demo-banner" hidden></div>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" data-brand href="./">Aan Tafel</a>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-small" data-href="/" href="./" data-i18n="back_home">← Website</a>
+        <div class="lang-switch" role="group" aria-label="Taal / Language">
+          <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="order-head">
+      <h1 data-i18n="order_title">Bestellen voor afhalen</h1>
+      <p class="muted" data-i18n="order_intro"></p>
+      <p class="small" id="pickup-location"></p>
+      <div id="paused" class="notice" hidden></div>
+      <div id="load-error" class="alert" hidden></div>
+    </div>
+
+    <div class="order-layout">
+      <div>
+        <section id="menu-view" aria-label="Menu">
+          <nav class="chips sticky-chips" id="chips" aria-label="Categorieën"></nav>
+          <div id="menu"><p class="muted" data-i18n="loading">Laden…</p></div>
+          <p class="menu-note" data-i18n="allergens_from_business"></p>
+        </section>
+
+        <section id="checkout-view" hidden aria-labelledby="checkout-title">
+          <button type="button" class="btn btn-ghost btn-small" id="back-to-menu">← <span data-i18n="back">Terug</span></button>
+          <h2 id="checkout-title" data-i18n="checkout">Afrekenen</h2>
+          <form id="checkout-form" novalidate>
+            <div id="form-error" class="alert" role="alert" hidden></div>
+
+            <fieldset class="field" id="f-mode" hidden>
+              <legend data-i18n="mode_question">Afhalen of bezorgen?</legend>
+              <div class="mode-switch" id="mode-options"></div>
+            </fieldset>
+
+            <fieldset class="field" id="f-address" hidden>
+              <legend data-i18n="delivery_address">Bezorgadres</legend>
+              <div class="addr-grid">
+                <div class="field" id="f-postcode">
+                  <label for="postcode" data-i18n="postcode">Postcode</label>
+                  <input id="postcode" type="text" autocomplete="postal-code" maxlength="7" placeholder="1234 AB">
+                </div>
+                <div class="field" id="f-houseNumber">
+                  <label for="houseNumber" data-i18n="house_number">Huisnummer</label>
+                  <input id="houseNumber" type="text" autocomplete="address-line2" maxlength="12">
+                </div>
+                <div class="field addr-wide" id="f-street">
+                  <label for="street" data-i18n="street">Straat</label>
+                  <input id="street" type="text" autocomplete="address-line1" maxlength="100">
+                </div>
+                <div class="field addr-wide" id="f-city">
+                  <label for="city" data-i18n="city">Plaats</label>
+                  <input id="city" type="text" autocomplete="address-level2" maxlength="80">
+                </div>
+              </div>
+              <p class="zone-info" id="zone-info" aria-live="polite"></p>
+            </fieldset>
+
+            <fieldset class="field" id="f-date">
+              <legend id="date-legend" data-i18n="pickup_date">Afhaaldag</legend>
+              <div class="chips" id="dates"></div>
+            </fieldset>
+            <fieldset class="field" id="f-time">
+              <legend id="time-legend" data-i18n="pickup_time">Afhaaltijd</legend>
+              <div class="slot-grid" id="slots"></div>
+              <p class="hint" id="slot-hint"></p>
+            </fieldset>
+
+            <h3 data-i18n="your_details">Je gegevens</h3>
+            <div class="field" id="f-name">
+              <label for="name" data-i18n="name">Naam</label>
+              <input id="name" name="name" type="text" autocomplete="name" required maxlength="100">
+            </div>
+            <div class="field" id="f-email">
+              <label for="email" data-i18n="email">E-mailadres</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200">
+              <p class="hint" data-i18n="email_hint"></p>
+            </div>
+            <div class="field" id="f-phone">
+              <label for="phone" data-i18n="phone">Telefoonnummer</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="25">
+              <p class="hint" data-i18n="phone_hint"></p>
+            </div>
+            <div class="field">
+              <label for="note"><span data-i18n="order_note">Opmerking</span> <span class="muted small">(<span data-i18n="optional">optioneel</span>)</span></label>
+              <textarea id="note" name="note" maxlength="500"></textarea>
+            </div>
+
+            <fieldset class="field" id="f-pay">
+              <legend data-i18n="payment">Betalen</legend>
+              <div id="pay-options"></div>
+            </fieldset>
+
+            <div class="card">
+              <h3 data-i18n="your_order">Je bestelling</h3>
+              <div id="checkout-summary"></div>
+            </div>
+            <p class="small muted" data-i18n="privacy_note"></p>
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn">…</button>
+          </form>
+        </section>
+      </div>
+
+      <aside class="cart-panel" id="cart" aria-labelledby="cart-title">
+        <div class="cart-panel-head">
+          <h2 id="cart-title" class="h3" data-i18n="your_order">Je bestelling</h2>
+          <button type="button" class="dialog-close" id="cart-close" aria-label="Sluiten" data-i18n-label="close">×</button>
+        </div>
+        <div id="cart-body"></div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="cart-bar" id="cart-bar" hidden>
+    <button type="button" class="btn btn-primary btn-block" id="cart-bar-btn"></button>
+  </div>
+
+  <dialog id="dish-dialog" aria-labelledby="dish-title">
+    <form method="dialog" id="dish-form">
+      <div class="dialog-inner">
+        <button type="button" class="dialog-close" id="dish-close" aria-label="Sluiten" data-i18n-label="close">×</button>
+        <h2 id="dish-title"></h2>
+        <div id="dish-body"></div>
+      </div>
+      <div class="dialog-foot">
+        <div class="qty" role="group">
+          <button type="button" id="qty-minus" aria-label="−">−</button>
+          <span id="qty-val" aria-live="polite">1</span>
+          <button type="button" id="qty-plus" aria-label="+">+</button>
+        </div>
+        <button type="submit" class="btn btn-primary flex-1" id="dish-add"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="site-footer" id="footer"></footer>
+</body>
+</html>
