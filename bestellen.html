@@ -7,10 +7,10 @@
   <meta name="description" content="Bestel online voor afhalen bij Aan Tafel.">
   <meta name="theme-color" content="#faf5ee">
   <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/css/site.css?v=mvo0zia2">
-  <script src="./assets/js/common.js?v=mvo0zia2" defer></script>
-  <script src="./assets/js/showcase-api.js?v=mvo0zia2" defer></script>
-  <script src="./assets/js/order.js?v=mvo0zia2" defer></script>
+  <link rel="stylesheet" href="./assets/css/site.css?v=mw5dnq06">
+  <script src="./assets/js/common.js?v=mw5dnq06" defer></script>
+  <script src="./assets/js/showcase-api.js?v=mw5dnq06" defer></script>
+  <script src="./assets/js/order.js?v=mw5dnq06" defer></script>
 </head>
 <body>
   <div id="demo-banner" class="demo-banner" hidden></div>
@@ -32,6 +32,14 @@
       <h1 data-i18n="order_title">Bestellen voor afhalen</h1>
       <p class="muted" data-i18n="order_intro"></p>
       <p class="small" id="pickup-location"></p>
+      <div class="card early-mode" id="early-mode" hidden>
+        <div class="mode-switch" id="early-mode-options" role="radiogroup" aria-label="Afhalen of bezorgen?" data-i18n-label="mode_question"></div>
+        <div class="field" id="early-pc" hidden>
+          <label for="early-postcode" data-i18n="zone_check_label">Bezorgen we bij jou? Vul je postcode in</label>
+          <input id="early-postcode" type="text" autocomplete="postal-code" maxlength="7" placeholder="1234 AB">
+          <p class="zone-info" id="early-zone-info" aria-live="polite"></p>
+        </div>
+      </div>
       <div id="paused" class="notice" hidden></div>
       <div id="load-error" class="alert" hidden></div>
     </div>

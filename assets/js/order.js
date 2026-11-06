@@ -280,6 +280,7 @@
     view = 'checkout';
     $('menu-view').hidden = true;
     $('checkout-view').hidden = false;
+    renderEarlyMode();
     renderCart();
     renderCheckout();
     loadDates();
@@ -289,6 +290,7 @@
     view = 'menu';
     $('menu-view').hidden = false;
     $('checkout-view').hidden = true;
+    renderEarlyMode();
     renderCart();
   };
 
@@ -307,19 +309,32 @@
     mode = m;
     try { sessionStorage.setItem('at_mode', m); } catch { /* leeg */ }
     sel.time = null;
-    renderCheckout();
-    loadDates();
+    renderEarlyMode();
+    if (view === 'checkout') { renderCheckout(); loadDates(); }
+    else if (m === 'delivery' && $('postcode').value && !zoneCheck) checkPostcode();
     refreshCart();
+  }
+
+  const modeChoice = (m, name) => el('label', { class: 'choice' },
+    el('input', { type: 'radio', name, value: m, checked: m === mode, 'aria-label': t(m === 'delivery' ? 'mode_delivery' : 'mode_pickup'), onchange: () => setMode(m) }),
+    el('strong', { text: t(m === 'delivery' ? 'mode_delivery' : 'mode_pickup') }),
+    el('span', { class: 'small muted', text: t(m === 'delivery' ? 'mode_delivery_hint' : 'mode_pickup_hint') }));
+
+  // Keuze afhalen/bezorgen en postcodecheck al boven het menu, vóór het afrekenen.
+  function renderEarlyMode() {
+    const modes = availableModes();
+    $('early-mode').hidden = view !== 'menu' || !site.ordering.delivery_enabled;
+    $('early-mode-options').hidden = modes.length < 2;
+    put($('early-mode-options'), ...(modes.length < 2 ? [] : modes.map((m) => modeChoice(m, 'early-mode'))));
+    $('early-pc').hidden = mode !== 'delivery';
+    if (document.activeElement !== $('early-postcode')) $('early-postcode').value = $('postcode').value;
   }
 
   function renderCheckout() {
     const o = site.ordering;
     const modes = availableModes();
     $('f-mode').hidden = modes.length < 2;
-    put($('mode-options'), ...modes.map((m) => el('label', { class: 'choice' },
-      el('input', { type: 'radio', name: 'mode', value: m, checked: m === mode, 'aria-label': t(m === 'delivery' ? 'mode_delivery' : 'mode_pickup'), onchange: () => setMode(m) }),
-      el('strong', { text: t(m === 'delivery' ? 'mode_delivery' : 'mode_pickup') }),
-      el('span', { class: 'small muted', text: t(m === 'delivery' ? 'mode_delivery_hint' : 'mode_pickup_hint') }))));
+    put($('mode-options'), ...modes.map((m) => modeChoice(m, 'mode')));
     const delivering = mode === 'delivery';
     $('f-address').hidden = !delivering;
     $('date-legend').textContent = t(delivering ? 'delivery_date' : 'pickup_date');
@@ -349,33 +364,31 @@
 
   // Postcode direct controleren zodra die compleet is.
   let pcTimer = null;
-  $('postcode').addEventListener('input', () => {
+  function postcodeChanged() {
     clearTimeout(pcTimer);
     zoneCheck = null;
     renderZoneInfo();
     pcTimer = setTimeout(checkPostcode, 350);
-  });
+  }
+  $('postcode').addEventListener('input', postcodeChanged);
+  $('early-postcode').addEventListener('input', () => { $('postcode').value = $('early-postcode').value; postcodeChanged(); });
   async function checkPostcode() {
     const pc = $('postcode').value;
     if (!validPostcode(pc)) { zoneCheck = null; renderZoneInfo(); return; }
-    $('zone-info').className = 'zone-info muted';
-    $('zone-info').textContent = t('zone_checking');
+    setZoneInfo('muted', t('zone_checking'));
     try {
       zoneCheck = await AT.api(`/api/delivery/check?postcode=${encodeURIComponent(pc)}`);
     } catch { zoneCheck = null; }
     renderZoneInfo();
     refreshCart();
   }
+  function setZoneInfo(state, text) {
+    for (const z of [$('zone-info'), $('early-zone-info')]) { z.className = 'zone-info' + (state ? ' ' + state : ''); z.textContent = text; }
+  }
   function renderZoneInfo() {
-    const z = $('zone-info');
-    if (!zoneCheck) { z.className = 'zone-info'; z.textContent = ''; return; }
-    if (!zoneCheck.ok) {
-      z.className = 'zone-info err';
-      z.textContent = zoneCheck.reason === 'outside_delivery_area' ? t('err_outside_delivery_area') : t('err_field_postcode');
-      return;
-    }
-    z.className = 'zone-info ok';
-    z.textContent = t('zone_ok', pick(zoneCheck.zone.name), AT.money(zoneCheck.fee_cents), zoneCheck.min_order_cents ? AT.money(zoneCheck.min_order_cents) : '');
+    if (!zoneCheck) return setZoneInfo('', '');
+    if (!zoneCheck.ok) return setZoneInfo('err', zoneCheck.reason === 'outside_delivery_area' ? t('err_outside_delivery_area') : t('err_field_postcode'));
+    setZoneInfo('ok', t('zone_ok', pick(zoneCheck.zone.name), AT.money(zoneCheck.fee_cents), zoneCheck.min_order_cents ? AT.money(zoneCheck.min_order_cents) : ''));
   }
 
   function renderSummary() {
@@ -385,6 +398,7 @@
       sel.date && sel.time ? el('p', { class: 'small' }, el('strong', { text: `${t(delivering ? 'delivery' : 'pickup')}: ` }), `${AT.dateLong(sel.date)} ${t('at')} ${sel.time}`) : null,
       delivering && a.street && a.houseNumber ? el('p', { class: 'small' }, el('strong', { text: `${t('delivery_address')}: ` }),
         `${a.street} ${a.houseNumber}, ${a.postcode} ${a.city}`) : null);
+    updateSubmitLabel();
   }
 
   function updateSubmitLabel() {
@@ -468,7 +482,7 @@
       if (address.street.length < 2) { fieldError('f-street', t('err_field_street')); ok = false; }
       if (address.city.length < 2) { fieldError('f-city', t('err_field_city')); ok = false; }
     }
-    if (!sel.date || !sel.time) { fieldError('f-time', t('err_invalid_pickup')); ok = false; }
+    if (!sel.date || !sel.time) { fieldError('f-time', t(delivering ? 'err_invalid_delivery' : 'err_invalid_pickup')); ok = false; }
     if (customer.name.length < 2) { fieldError('f-name', t('err_field_name')); ok = false; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(customer.email)) { fieldError('f-email', t('err_field_email')); ok = false; }
     if (customer.phone.replace(/\D/g, '').length < 8) { fieldError('f-phone', t('err_field_phone')); ok = false; }
@@ -580,6 +594,8 @@
       site.ordering.pickup_enabled && site.ordering.delivery_enabled ? el('br') : null,
       site.ordering.delivery_enabled && zones ? el('span', {}, el('strong', { text: `${t('delivery_in')}: ` }), zones) : null);
     renderPaused();
+    renderEarlyMode();
+    renderZoneInfo();
     renderMenu();
     renderCart();
     if (view === 'checkout') { renderCheckout(); renderDates(); loadSlots(); }
@@ -596,6 +612,7 @@
     }
     cart = cart.filter((l) => l && Number.isInteger(l.productId) && Array.isArray(l.options));
     initMode();
+    try { const pc = JSON.parse(sessionStorage.getItem('at_details') || '{}').postcode; if (pc) $('postcode').value = pc; } catch { /* leeg */ }
     ['street', 'houseNumber', 'city'].forEach((id) => $(id).addEventListener('input', () => { if (view === 'checkout') renderSummary(); }));
     renderAll();
     if ($('postcode').value) checkPostcode();

@@ -362,3 +362,7 @@ fieldset { min-width: 0; min-inline-size: 0; }
 .order-layout { grid-template-columns: minmax(0, 1fr); }
 .order-layout > * { min-width: 0; }
 @media (min-width: 980px) { .order-layout { grid-template-columns: minmax(0, 1fr) 360px; } }
+/* Keuze afhalen/bezorgen en postcodecheck boven het menu */
+.early-mode { margin-top: 12px; }
+.early-mode .field { margin: 12px 0 0; }
+.early-mode .mode-switch[hidden] + .field { margin-top: 0; }

@@ -118,7 +118,7 @@
         o.address
           ? [el('dt', { text: t('delivery_address') }), el('dd', {}, `${o.address.street} ${o.address.house_number}`, el('br'), `${o.address.postcode} ${o.address.city}`)]
           : [el('dt', { text: t('address') }), el('dd', {}, b.name, el('br'), b.street, el('br'), `${b.postal_code} ${b.city}`)],
-        b.phone ? el('dt', { text: t('phone') }) : null, b.phone ? el('dd', { text: b.phone }) : null),
+        b.phone ? el('dt', { text: t('business_contact') }) : null, b.phone ? el('dd', { text: b.phone }) : null),
       lines, totals,
       confirmed && !o.showcase ? el('p', { class: 'small muted', text: o.demo ? t('demo_no_mail') : `${t('confirmation_sent')} ${o.customer.email_masked}.` }) : null,
       el('p', {},

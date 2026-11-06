@@ -5,7 +5,7 @@
   const STR = {
     nl: {
       nav_menu: 'Menukaart', nav_story: 'Over ons', nav_info: 'Openingstijden & route', nav_order: 'Bestellen',
-      btn_menu: 'Bekijk de menukaart', btn_order: 'Bestel voor afhalen',
+      btn_menu: 'Bekijk de menukaart', btn_order: 'Bestel voor afhalen', btn_order_both: 'Bestellen',
       demo_banner: '<strong>Demo</strong> – Aan Tafel en alle bedrijfsgegevens zijn fictief. Bestellingen gaan niet naar een echte zaak en betalingen zijn testbetalingen.',
       fictional_banner: 'Let op: deze bedrijfsgegevens zijn fictief.',
       back_home: '← Website',
@@ -26,6 +26,7 @@
       delivery_address: 'Bezorgadres', postcode: 'Postcode', house_number: 'Huisnummer', street: 'Straat', city: 'Plaats',
       delivery_date: 'Bezorgdag', delivery_time: 'Bezorgtijd', delivery_time_hint: 'Rond deze tijd bezorgen we je bestelling.',
       delivery_fee: 'Bezorgkosten', zone_checking: 'Postcode controleren…',
+      zone_check_label: 'Bezorgen we bij jou? Vul je postcode in', business_contact: 'Contact met de zaak',
       zone_ok: (zone, fee, min) => `We bezorgen in ${zone}. Bezorgkosten ${fee}${min ? `, minimum bestelbedrag ${min}` : ''}.`,
       min_short: (amount) => `Nog ${amount} tot het minimum bestelbedrag voor bezorgen.`,
       delivery_in: 'Bezorgen in', pay_delivery: 'Betalen bij bezorging', pay_delivery_hint: 'Je betaalt aan de deur.',
@@ -94,7 +95,7 @@
       err_slot_full: 'Dit afhaalmoment is net volgeboekt. Kies een ander tijdstip.',
       err_pickup_date_unavailable: 'Op deze dag kun je niet afhalen. Kies een andere dag.',
       err_pickup_time_unavailable: 'Deze afhaaltijd is niet (meer) beschikbaar. Kies een ander tijdstip.',
-      err_invalid_pickup: 'Kies een afhaaldag en -tijd.',
+      err_invalid_pickup: 'Kies een afhaaldag en -tijd.', err_invalid_delivery: 'Kies een bezorgdag en -tijd.',
       err_ordering_paused: 'Online bestellen is op dit moment gepauzeerd.',
       err_payment_method_unavailable: 'Deze betaalmethode is nu niet beschikbaar. Kies een andere.',
       err_invalid_customer: 'Controleer je gegevens.',
@@ -113,7 +114,7 @@
     },
     en: {
       nav_menu: 'Menu', nav_story: 'About', nav_info: 'Hours & directions', nav_order: 'Order',
-      btn_menu: 'View the menu', btn_order: 'Order for pickup',
+      btn_menu: 'View the menu', btn_order: 'Order for pickup', btn_order_both: 'Order',
       demo_banner: '<strong>Demo</strong> – Aan Tafel and all business details are fictional. Orders are not sent to a real business and payments are test payments.',
       fictional_banner: 'Note: these business details are fictional.',
       back_home: '← Website',
@@ -134,6 +135,7 @@
       delivery_address: 'Delivery address', postcode: 'Postcode', house_number: 'House number', street: 'Street', city: 'City',
       delivery_date: 'Delivery day', delivery_time: 'Delivery time', delivery_time_hint: 'We deliver your order around this time.',
       delivery_fee: 'Delivery fee', zone_checking: 'Checking postcode…',
+      zone_check_label: 'Do we deliver to you? Enter your postcode', business_contact: 'Contact the business',
       zone_ok: (zone, fee, min) => `We deliver to ${zone}. Delivery fee ${fee}${min ? `, minimum order ${min}` : ''}.`,
       min_short: (amount) => `${amount} more to reach the minimum order for delivery.`,
       delivery_in: 'Delivery to', pay_delivery: 'Pay on delivery', pay_delivery_hint: 'You pay at the door.',
@@ -200,7 +202,7 @@
       err_slot_full: 'This pickup time has just filled up. Please choose another time.',
       err_pickup_date_unavailable: 'Pickup is not possible on this day. Please choose another day.',
       err_pickup_time_unavailable: 'This pickup time is no longer available. Please choose another time.',
-      err_invalid_pickup: 'Please choose a pickup day and time.',
+      err_invalid_pickup: 'Please choose a pickup day and time.', err_invalid_delivery: 'Please choose a delivery day and time.',
       err_ordering_paused: 'Online ordering is currently paused.',
       err_payment_method_unavailable: 'This payment method is not available right now. Please choose another.',
       err_invalid_customer: 'Please check your details.',
@@ -341,6 +343,8 @@
       b.setAttribute('href', AT.link('/'));
     });
     document.querySelectorAll('[data-i18n]').forEach((n) => { n.textContent = AT.t(n.dataset.i18n); });
+    // Kan er ook bezorgd worden, dan heet de bestelknop gewoon 'Bestellen'.
+    if (site.ordering?.delivery_enabled) document.querySelectorAll('[data-i18n="btn_order"]').forEach((n) => { n.textContent = AT.t('btn_order_both'); });
     document.querySelectorAll('[data-i18n-label]').forEach((n) => { n.setAttribute('aria-label', AT.t(n.dataset.i18nLabel)); });
     document.querySelectorAll('[data-href]').forEach((n) => { n.setAttribute('href', AT.link(n.dataset.href)); });
     document.querySelectorAll('.lang-switch button').forEach((b) => {
