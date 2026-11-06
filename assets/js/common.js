@@ -367,3 +367,36 @@
 
   window.AT = AT;
 })();
+
+// Consistent demo navigation on every page.
+(() => {
+  const style = document.createElement('style');
+  style.textContent = "\n.demo-bar,.demo-banner,.demo-notice {position:sticky!important;top:0!important;z-index:1200!important;background:#fff4d6!important;color:#30281d!important;padding:10px 16px!important;font:400 14px/1.5 system-ui,sans-serif!important;text-align:center!important;box-sizing:border-box!important;}\n.od-demo-inner {display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 18px;max-width:1200px;margin:auto;}\n.od-demo-copy strong {font-weight:750!important;color:inherit!important;}\n.od-demo-links {display:flex;justify-content:center;flex-wrap:wrap;gap:8px 16px;}\n.od-demo-links a {display:inline-block!important;color:#30281d!important;font-weight:700!important;text-decoration:underline!important;text-underline-offset:3px;white-space:normal!important;}\n.od-demo-links a:last-child {padding:5px 12px;border:1px solid #806525;border-radius:6px;text-decoration:none!important;}\nheader.site,.site-header,.demo-header {top:var(--od-demo-height,80px)!important;}\nhtml {scroll-padding-top:calc(var(--od-demo-height,80px) + var(--od-header-height,72px) + 16px)!important;}\n.sticky-chips {top:calc(var(--od-demo-height,80px) + var(--od-header-height,60px))!important;}\n.cart-panel {scroll-margin-top:calc(var(--od-demo-height,80px) + var(--od-header-height,60px));}\n@media(min-width:900px){.cart-panel{top:calc(var(--od-demo-height,80px) + var(--od-header-height,60px) + 16px)!important;}}\n@media(max-width:900px){.menu-open .nav,.site-nav.is-open{top:calc(var(--od-demo-height,80px) + var(--od-header-height,60px))!important;}.cart-panel.open{top:var(--od-demo-height,80px)!important;}}\n";
+  document.head.append(style);
+  const name = "Aan Tafel";
+  const observed = new WeakSet();
+  const measure = () => {
+    const bar = document.querySelector('.demo-bar,.demo-banner,.demo-notice');
+    const header = document.querySelector('header.site,.site-header,.demo-header');
+    document.documentElement.style.setProperty('--od-demo-height', (bar ? bar.getBoundingClientRect().height : 0) + 'px');
+    document.documentElement.style.setProperty('--od-header-height', (header ? header.getBoundingClientRect().height : 0) + 'px');
+  };
+  const resize = new ResizeObserver(measure);
+  function sync() {
+    const bar = document.querySelector('.demo-bar,.demo-banner,.demo-notice');
+    if (!bar || bar.hidden) return;
+    const en = document.documentElement.lang.startsWith('en');
+    const home = 'https://umpreneur.github.io/onlinedesk/' + (en ? '#lang=en' : '#lang=nl');
+    const pkg = 'https://umpreneur.github.io/onlinedesk/pakket.html?id=horeca#lang=' + (en ? 'en' : 'nl');
+    const markup = '<div class="od-demo-inner"><span class="od-demo-copy"><strong>' + (en ? 'This is a demo.' : 'Dit is een demo.') + '</strong> ' + name + (en ? ' is fictional. Nothing is sent or paid.' : ' is fictief. Er wordt niets verstuurd of betaald.') + '</span><span class="od-demo-links"><a href="' + home + '">' + (en ? 'Back to OnlineDesk' : 'Terug naar OnlineDesk') + '</a><a href="' + pkg + '">' + (en ? 'View this website package' : 'Bekijk dit websitepakket') + '</a></span></div>';
+    if (bar.innerHTML !== markup) bar.innerHTML = markup;
+    bar.setAttribute('aria-label', en ? 'Demo information' : 'Demomelding');
+    if (!observed.has(bar)) { resize.observe(bar); observed.add(bar); }
+    const header = document.querySelector('header.site,.site-header,.demo-header');
+    if (header && !observed.has(header)) { resize.observe(header); observed.add(header); }
+    measure();
+  }
+  new MutationObserver(sync).observe(document.body, {childList:true,subtree:true});
+  new MutationObserver(sync).observe(document.documentElement, {attributes:true,attributeFilter:['lang']});
+  sync();
+})();
