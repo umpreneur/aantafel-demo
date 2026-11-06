@@ -215,7 +215,10 @@
         summary(),button(say('Opnieuw proberen','Try again'),()=>{Object.assign(reservation,{date:'',time:'',name:'',email:'',note:'',step:1});renderReservation(true);}));
     }
     put(root,demo,reservation.step<4?progress:null,panel);
-    if(focus) document.getElementById('reservation-step-title')?.focus({preventScroll:true});
+    if(focus) {
+      root.scrollIntoView({behavior:'instant',block:'start'});
+      document.getElementById('reservation-step-title')?.focus({preventScroll:true});
+    }
   }
 
   async function load() {
