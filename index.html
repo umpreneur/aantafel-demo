@@ -7,9 +7,9 @@
   <meta name="description" content="Schuif aan voor goede koffie, een vers ontbijt of een uitgebreide lunch.">
   <meta name="theme-color" content="#faf5ee">
   <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/css/site.css?v=mw5e6uc8">
+  <link rel="stylesheet" href="./assets/css/site.css?v=20261106-reservations">
   <script src="./assets/js/common.js?v=20261106-demo-buttons" defer></script>
-  <script src="./assets/js/site.js?v=mw5e6uc8" defer></script>
+  <script src="./assets/js/site.js?v=20261106-reservations" defer></script>
 </head>
 <body>
   <div id="demo-banner" class="demo-banner" hidden></div>
@@ -18,6 +18,7 @@
       <a class="brand" data-brand href="./">Aan Tafel</a>
       <nav class="nav" aria-label="Hoofdmenu">
         <a href="#menukaart" data-i18n="nav_menu">Menukaart</a>
+        <a href="#reserveren" data-reserve-link>Reserveer een tafel</a>
         <a href="#over" data-i18n="nav_story">Over ons</a>
         <a href="#info" data-i18n="nav_info">Openingstijden &amp; route</a>
       </nav>
@@ -42,6 +43,7 @@
           <div class="hero-actions">
             <a class="btn" href="#menukaart" data-i18n="btn_menu">Bekijk de menukaart</a>
             <a class="btn btn-primary" data-href="/bestellen" href="./bestellen" data-i18n="btn_order">Bestel voor afhalen</a>
+            <a class="btn" href="#reserveren" data-reserve-link>Reserveer een tafel</a>
           </div>
           <p class="hero-facts" id="hero-facts"></p>
         </div>
@@ -63,6 +65,14 @@
             <a class="btn btn-primary" data-href="/bestellen" href="./bestellen" data-i18n="btn_order">Bestel voor afhalen</a>
           </footer>
         </article>
+      </div>
+    </section>
+
+
+    <section id="reserveren" class="section-soft" aria-labelledby="reservation-title">
+      <div class="wrap reservation-wrap">
+        <header class="reservation-heading"><p class="hero-name">AAN TAFEL</p><h2 id="reservation-title">Een plekje aan tafel.</h2><p id="reservation-intro">Kies een moment en ervaar hoe eenvoudig reserveren kan zijn.</p></header>
+        <div id="reservation-app" class="reservation-card"><p>De demoagenda wordt geladen…</p></div>
       </div>
     </section>
 
